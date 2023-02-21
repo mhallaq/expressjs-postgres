@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const pool = require("./dbConnection");
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3333;
 
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
@@ -96,4 +96,7 @@ app.put("/videos/:id", async (req, res) => {
   }
 });
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+
+app.listen(port, () => {
+  console.log(`Video app listening at http://localhost:${port}`);
+});
