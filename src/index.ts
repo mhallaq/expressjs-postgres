@@ -22,32 +22,35 @@
 //   console.log(`Example app listening at http://localhost:${port}`);
 // });
 
-const express = require("express");
-const app = express();
-const cors = require("cors");
-const pool = require("./dbConnection");
-const port = process.env.PORT || 3333;
+import express, { Application, Request, Response } from "express";
+import cors from "cors";
+import pool from "./dbConnection";
+import { Pool } from "pg";
+import { json, urlencoded } from "body-parser";
+
+const app: Application = express();
+const port: number | string = process.env.PORT || 3333;
 
 app.use(cors());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json()); // To parse the incoming requests with JSON payloads
+app.use(urlencoded({ extended: true }));
+app.use(json()); // To parse the incoming requests with JSON payloads
 // Store and retrieve your videos from here
 // If you want, you can copy "exampleresponse.json" into here to have some data to work with
 // let videos = require("../exampleresponse.json");
 
 // GET "/"
-app.get("/videos", async (req, res) => {
+app.get("/videos", async (req: Request, res: Response) => {
   try {
     const allVideos = await pool.query("SELECT * FROM videos");
     res.json(allVideos.rows);
-  } catch (err) {
+  } catch (err: any) {
     console.error(err.message);
   }
 });
 
 // GET a video by ID
 
-app.get("/videos/:id", async (req, res) => {
+app.get("/videos/:id", async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id);
     const video = await pool.query("SELECT * FROM videos WHERE id = $1", [id]);
@@ -57,14 +60,14 @@ app.get("/videos/:id", async (req, res) => {
     }
 
     res.json(video.rows[0]);
-  } catch (err) {
+  } catch (err: any) {
     console.error(err.message);
   }
 });
 
 // POST a new Video
 
-app.post("/videos", async (req, res) => {
+app.post("/videos", async (req: Request, res: Response) => {
   try {
     const { title, url } = req.body;
     if (!title || !url) {
@@ -77,14 +80,14 @@ app.post("/videos", async (req, res) => {
       [title, url, 0]
     );
     res.json(newVideo.rows[0]);
-  } catch (err) {
+  } catch (err: any) {
     console.log(err.message);
   }
 });
 
 // Delete a video by id
 
-app.delete("/videos/:id", async (req, res) => {
+app.delete("/videos/:id", async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   try {
     const result = await pool.query("DELETE FROM videos WHERE id = $1", [id]);
@@ -94,7 +97,7 @@ app.delete("/videos/:id", async (req, res) => {
         .json({ result: "failure", message: "Video not found" });
     }
     res.json({ result: "success" });
-  } catch (err) {
+  } catch (err: any) {
     console.error(err.message);
     res.status(500).json({
       result: "failure",
@@ -105,7 +108,7 @@ app.delete("/videos/:id", async (req, res) => {
 
 //Change the rating of the Videos
 
-app.put("/videos/:id", async (req, res) => {
+app.put("/videos/:id", async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id);
     const vote = parseInt(req.body.vote);
@@ -114,7 +117,7 @@ app.put("/videos/:id", async (req, res) => {
       [vote, id]
     );
     res.json(rows[0]);
-  } catch (err) {
+  } catch (err: any) {
     console.error(err.message);
     res.status(500).json({ message: "Internal Server Error" });
   }
