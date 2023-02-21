@@ -1,13 +1,30 @@
+// {
+//   "compilerOptions": {
+//     "outDir": "dist",
+//     "rootDir": ".",
+//     "incremental": true,
+//     "target": "es6",
+//     "module": "commonjs",
+//     "strict": true,
+//     "esModuleInterop": true,
+//     "skipLibCheck": true,
+//     "forceConsistentCasingInFileNames": true
+//   }
+// }
+
 {
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": ".",
+    "rootDir": "src",
     "incremental": true,
     "target": "es6",
     "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
-  }
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": true
+  },
+  "include": ["src/**/*.ts", "src/**/*.js"],
+  "exclude": ["node_modules", "dist"]
 }
